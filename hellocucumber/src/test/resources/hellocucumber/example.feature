@@ -6,4 +6,6 @@ Feature: An example
     When user fills the "Last Name" field with "Surname"
     When user fills the "Email" field with "name.sirname"gmail.com"
     When user fills the "Password" field with "namesirname@123#"
-    Then the scenario passes
+    When user click on the both checkbox
+    When user click on the "SIGN UP" button
+    Then user should see a confirmation message

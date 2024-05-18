@@ -20,13 +20,13 @@ import io.cucumber.java.en.When;
 public class StepDefinitions {
 	
 	public static WebDriver driver = null;
-	public static String firstname="//*[@id=\"first_name\"]";
-	public static String lastName="//*[@id=\"last_name\"]";
+	public static String firstname="//*[@id='first_name']";
+	public static String lastName="//*[@id='last_name']";
 	public static String email="//*[@id=\"user_email\"]";
 	public static String pwd="//*[@id=\"user_password\"]";
 	public static String AGTC = "//*[@id=\"terms\"]";
-	public static String robotcheck= "//*[@id=\"recaptcha-anchor\"]/div[1]";
-	public static String signUp= "//*[@id=\"send\"]";
+	public static String robotcheck= "//*[@id='recaptcha-anchor']/div[1]";
+	public static String signUp= "//*[@id='send']";
 			
 			
 	@Before
@@ -38,7 +38,7 @@ public class StepDefinitions {
 		{
 			System.setProperty(
 					"webdriver.edge.driver",
-					"C:\\Shweta\\project\\Selenium\\edgedriver_win64\\msedgedriver.exe");
+					"C:\\Ashish\\project\\Selenium\\edgedriver_win64\\msedgedriver.exe");
 			EdgeOptions options = new EdgeOptions();
 
 			driver = new EdgeDriver(options);
@@ -47,24 +47,28 @@ public class StepDefinitions {
 			driver.manage().window().maximize();
 
 			// Launch Website
-			driver.get("https://signin.storyful.com/trial/signup-form-01489905846464720243");	
+				
 		}
 	}
 
 	@Given("on the sign-up page")
-	public void anExampleScenario() {
-
+	public void anExampleScenario() throws InterruptedException {
+		driver.get("https://signin.storyful.com/trial/signup-form-01489905846464720243");
+		WebDriverWait wait = new WebDriverWait(driver, 300);
+		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id='hs-eu-confirmation-button']")));
+		clickOnButton(driver, "//*[@id='hs-eu-confirmation-button']");
 
 	}
 
-	@When("user fills the \"(.*?)\"$ field with \\\"(.*?)\"$")
+	@When("user fills the \"(.*?)\" field with \"(.*?)\"$")
 	public void allStepDefinitionsAreImplemented(String textbox , String value) throws Exception {
+		
 		if(textbox == null || value == null || StringUtils.isBlank(textbox) || StringUtils.isBlank(value)) {
 			throw new Exception("Check Feature file");
 		}
 	
 		WebDriverWait wait = new WebDriverWait(driver, 300);
-		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[contains(@class,'nav-sub-li literal-management')]")));
+		wait.until(ExpectedConditions.elementToBeClickable(By.xpath(firstname)));
 		try {
 			if(textbox.equalsIgnoreCase("First Name")) {
 				findElementByXpath(driver, firstname).click();
@@ -87,8 +91,15 @@ public class StepDefinitions {
 		}
 	}
 
-	@Then("user click on the \"(.*?)\"$ checkbox")
-	public void theScenarioPasses() {
+	@When("user click on the both checkbox")
+	public void theScenarioPasses() throws Exception {
+		WebDriverWait wait = new WebDriverWait(driver, 300);
+		
+			wait.until(ExpectedConditions.elementToBeClickable(
+					By.xpath(AGTC)));
+			clickOnButton(driver, AGTC);	
+			findElementByXpath(driver, robotcheck).click();
+		
 	}
 	
 	public WebElement findElementByXpath(WebDriver driver, String xpath) throws InterruptedException {
@@ -110,6 +121,26 @@ public class StepDefinitions {
 		WebElement searchbox = driver.findElement(By.xpath(xpath));
 		JavascriptExecutor myExecutor = ((JavascriptExecutor) driver);
 		myExecutor.executeScript("arguments[0].value='" + value + "';", searchbox);
+	}
+	
+	public void clickOnButton(WebDriver driver, String xpath) throws InterruptedException {
+
+		WebDriverWait wait = new WebDriverWait(driver, 300);
+		wait.until(ExpectedConditions.elementToBeClickable(By.xpath(xpath)));
+		Thread.sleep(2000);
+		WebElement element = driver.findElement(By.xpath(xpath));
+		JavascriptExecutor executor = (JavascriptExecutor) driver;
+		executor.executeScript("arguments[0].click();", element);
+	}
+	
+	@Then("user click on the \"(.*?)\" button)
+	public void theScenarioPasses() throws Exception {
+		WebDriverWait wait = new WebDriverWait(driver, 300);
+		
+			wait.until(ExpectedConditions.elementToBeClickable(
+					By.xpath(signUp)));
+			clickOnButton(driver, signUp);
+		
 	}
 
 }
