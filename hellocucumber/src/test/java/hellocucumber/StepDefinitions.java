@@ -38,7 +38,7 @@ public class StepDefinitions {
 		{
 			System.setProperty(
 					"webdriver.edge.driver",
-					"C:\\Ashish\\project\\Selenium\\edgedriver_win64\\msedgedriver.exe");
+					"C:\\Shweta\\project\\Selenium\\edgedriver_win64\\msedgedriver.exe");
 			EdgeOptions options = new EdgeOptions();
 
 			driver = new EdgeDriver(options);
